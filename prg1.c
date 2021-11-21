@@ -24,6 +24,7 @@ void lknow();
 void ccount();
 void replace();
 void replaceAll(char *str, const char *oldWord, const char *newWord);
+void edit();
 
 int main(){
 
@@ -99,6 +100,10 @@ int main(){
         exits();
     }else if(strcmp(a, "replace")==0){
         replace();
+    }else if(strcmp(a, "edit") == 0){
+
+        edit();
+
     }else{
         printf("Enter only stated things in help\n");
     }
@@ -209,7 +214,7 @@ void append(){
 }
 
 void clear(){
-    system("cls");
+    system("clear");
 }
 
 void dt(){
@@ -258,14 +263,6 @@ void renames(){
 
 }
 
-void edit(){
-    char a[100];
-    scanf("%s", a);
-
-    system(a);
-
-    printf("Successfully opened editing software\n");
-}
 
 void cdir(){
     char a[100];
@@ -475,6 +472,57 @@ void replaceAll(char *str, const char *oldWord, const char *newWord)
         // oldword found index.
         strcat(str, temp + index + owlen);
     }
+}
+
+void edit(){
+    char fileName[100];
+    scanf("%s",fileName);
+    int lineNo;
+    scanf("%d",&lineNo);
+    FILE* p,*q;
+    p=fopen(fileName,"r");
+    q=fopen("temp","w");
+    if(p == NULL ){
+        printf("The file is not found\n");
+    }else{
+    char c;
+    c = fgetc(p);
+    int count=1;
+    while(c != EOF && count<=lineNo){
+        fputc(c, q);
+        if(c=='\n')
+            count++;
+        c = fgetc(p);
+    }
+     fflush(stdin);
+
+        printf("Enter ~ to exit from writing\n");
+        printf("Start writing: \n");
+
+        int ch=NULL;
+
+        while(ch != '~'){
+            ch = getchar();
+
+            if(ch != '~'){
+
+            fputc(ch, q);
+
+        }
+    }
+    c = fgetc(p);
+    while(c!='\n'&& c!=EOF)
+        c=fgetc(p);
+    while(c != EOF){
+        fputc(c, q);
+        c = fgetc(p);
+    }
+    fclose(p);
+    fclose(q);
+    int m=remove(fileName);
+    m=rename("temp",fileName);
+
+}
 }
 
 void help(){
