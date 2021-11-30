@@ -433,7 +433,7 @@ void edit()
     scanf("%d", & lineNo);
     int p = open(fileName, O_RDONLY);
     int q = open("temp", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-    if (p == -1) 
+    if (p == -1 || q == -1) 
     {
         printf("The file is not found\n");
     } 
@@ -477,6 +477,7 @@ void help()
     printf("You can enter the following commands:\n\n");
     printf("write  >>> To write to a file\t\t\t\tSyntax: \"write filename.txt\"\n");
     printf("read   >>> To read from a file\t\t\t\tSyntax: \"read filename.txt\"\n");
+    printf("edit   >>> To edit a particular line from a file\tSyntax: \"edit filename.txt line_no\"\n");
     printf("append >>> To append a file\t\t\t\tSyntax: \"append filename.txt\"\n");
     printf("remove >>> To remove a file\t\t\t\tSyntax: \"remove filename.txt\"\n");
     printf("rename >>> To rename a file\t\t\t\tSyntax: \"rename oldFileName.txt newFileName.txt\"\n");
@@ -487,7 +488,7 @@ void help()
     printf("copy   >>> To copy one file to new file\t\t\tSyntax: \"copy file1.txt file2.txt\"\n");
     printf("cknow  >>> To know character count\t\t\tSyntax: \"cknow fileName.txt character\"\n");
     printf("lknow  >>> To get number of lines\t\t\tSyntax: \"lknow FileName.txt\"\n");
-    printf("replace>>> To find and replace \t\t\tSyntax: \"replace FileName.txt oldWord newWord\"\n");
+    printf("replace>>> To find and replace \t\t\t\tSyntax: \"replace FileName.txt oldWord newWord\"\n");
     printf("exit   >>> To exit\n");
     printf("\n");
 }
