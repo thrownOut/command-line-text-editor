@@ -12,6 +12,8 @@
 #include <sys/ioctl.h>
 #include <linux/if.h>
 #include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define BUFFER_SIZE 1000
 
@@ -33,6 +35,7 @@ void ccount();
 void replace();
 void replaceAll(char *str, const char *oldWord, const char *newWord);
 void get_mac();
+void get_ip();
 void edit();
 void Sysinfo();
 
@@ -502,11 +505,28 @@ void get_mac()
     return;
 }
 
+void get_ip()
+{
+    int n;
+    struct ifreq ifr;
+    char array[] = "eth0";
+    n = socket(AF_INET, SOCK_DGRAM, 0);
+    //Type of address to retrieve - IPv4 IP address
+    ifr.ifr_addr.sa_family = AF_INET;
+    //Copy the interface name in the ifreq structure
+    strncpy(ifr.ifr_name , array , IFNAMSIZ - 1);
+    ioctl(n, SIOCGIFADDR, &ifr);
+    close(n);
+    //display result
+    printf("IP Address : %s\n", inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+}
+
 void Sysinfo()
 {
     printf("Number of processors configured : %ld\n", sysconf(_SC_NPROCESSORS_CONF));
     printf("Number of processors available  : %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
     get_mac();
+    get_ip();
 }
 
 void help()
