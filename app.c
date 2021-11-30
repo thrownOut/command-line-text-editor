@@ -144,7 +144,7 @@ void Write()
     char a[100];
     scanf("%s", a);
     fflush(stdin);
-    int fd = open(a, O_WRONLY);
+    int fd = open(a, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd == -1)
     {
         printf("Error\n");
@@ -152,7 +152,7 @@ void Write()
     }
     printf("Enter ~ to exit from writing\n");
     printf("Start writing: \n");
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     char ch;
     while(ch != '~')
     {
@@ -161,43 +161,34 @@ void Write()
             write(fd, &ch, 1);
     }
     close(fd);
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    printf("\nSuccessfully Written\n");
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    printf("Successfully Written\n");
 }
 
 void append()
 {
     char a[100];
     FILE *p;
-        scanf("%s", a);
-
-        if(p == NULL){
+    scanf("%s", a);
+    p = fopen(a, "a");
+    if(p == NULL)
+    {
         printf("Error");
-        }
-
-        p = fopen(a, "a");
-
-        printf("Enter ~ to exit from writing\n");
-        printf("Start writing: \n");
-
-        char ch;
-
-        while(ch != '~'){
-            ch = getchar();
-
-            if(ch != '~'){
-
-            fputc(ch, p);
-
-        }
-
+        return;
     }
-
-
-        fclose(p);
-
-        printf("\n\nSuccessfully Appended\n");
-
+    printf("Enter ~ to exit from writing\n");
+    printf("Start writing: \n");
+    char ch;
+    while(ch != '~')
+    {
+        ch = getchar();
+        if(ch != '~')
+        {
+            fputc(ch, p);
+        }
+    }
+    fclose(p);
+    printf("\n\nSuccessfully Appended\n");
 }
 
 void clear()
