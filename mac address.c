@@ -1,22 +1,26 @@
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <linux/if.h>
-#include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <arpa/inet.h> 
 
 int main()
 {
-  struct ifreq s;
-  int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
-
-  strcpy(s.ifr_name, "eth0");
-  if (0 == ioctl(fd, SIOCGIFHWADDR, &s)) {
-    int i;
-    for (i = 0; i < 6; ++i)
-      printf(" %02x", (unsigned char) s.ifr_addr.sa_data[i]);
-    puts("\n");
+    int n;
+    struct ifreq ifr;
+    char array[] = "eth0";
+    n = socket(AF_INET, SOCK_DGRAM, 0);
+    //Type of address to retrieve - IPv4 IP address
+    ifr.ifr_addr.sa_family = AF_INET;
+    //Copy the interface name in the ifreq structure
+    strncpy(ifr.ifr_name , array , IFNAMSIZ - 1);
+    ioctl(n, SIOCGIFADDR, &ifr);
+    close(n);
+    //display result
+    printf("IP Address is %s - %s\n" , array , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
     return 0;
-  }
-  return 1;
 }
