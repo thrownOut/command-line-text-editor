@@ -8,6 +8,10 @@
 #include<fcntl.h>
 #include<sys/types.h>
 #include<sys/stat.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <linux/if.h>
+#include <netdb.h>
 
 #define BUFFER_SIZE 1000
 
@@ -28,6 +32,7 @@ void lknow();
 void ccount();
 void replace();
 void replaceAll(char *str, const char *oldWord, const char *newWord);
+void get_mac();
 void edit();
 void Sysinfo();
 
@@ -476,10 +481,32 @@ void edit()
     }
 }
 
+void get_mac()
+{
+    struct ifreq s;
+    int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    strcpy(s.ifr_name, "eth0");
+    if (ioctl(fd, SIOCGIFHWADDR, &s) == 0) 
+    {
+        int i;
+        printf("MAC address : ");
+        for (i = 0; i < 6; ++i)
+        {
+            printf("%02x", (unsigned char) s.ifr_addr.sa_data[i]);
+            if (i < 5)
+                printf(":");
+        }
+        printf("\n");
+        return;
+    }
+    return;
+}
+
 void Sysinfo()
 {
     printf("Number of processors configured : %ld\n", sysconf(_SC_NPROCESSORS_CONF));
     printf("Number of processors available  : %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
+    get_mac();
 }
 
 void help()
