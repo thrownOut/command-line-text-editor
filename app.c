@@ -34,10 +34,8 @@ int main(){
 
     char a[100];
     printf("__________________Command Line Text Editor__________________\n\n");
-
     dt();
     printf("Type \"help\" for more things!\n\n");
-
     do
     {
         printf(">>> ");
@@ -168,12 +166,11 @@ void Write()
 void append()
 {
     char a[100];
-    FILE *p;
     scanf("%s", a);
-    p = fopen(a, "a");
-    if(p == NULL)
+    int fd = open(a, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+    if(fd == -1)
     {
-        printf("Error");
+        printf("Error\n");
         return;
     }
     printf("Enter ~ to exit from writing\n");
@@ -184,11 +181,11 @@ void append()
         ch = getchar();
         if(ch != '~')
         {
-            fputc(ch, p);
+            write(fd, &ch, 1);
         }
     }
-    fclose(p);
-    printf("\n\nSuccessfully Appended\n");
+    close(fd);
+    printf("\nSuccessfully Appended\n");
 }
 
 void clear()
@@ -204,9 +201,8 @@ void dt()
 
 void startscreen()
 {
-    system("cls");
+    system("clear");
     printf("Command Line Text Editor\n\n");
-
     dt();
     printf("Type \"help\" for more things!\n\n");
 }
@@ -216,7 +212,7 @@ void removes()
     char a[100];
     int m;
     scanf("%s", a);
-    m = remove(a);
+    m = unlink(a);
     if(m == 0)
     {
         printf("Successfully removed a file\n");
@@ -242,7 +238,6 @@ void renames()
     {
         printf("Error in removing please check if the file exists in directory\n");
     }
-
 }
 
 
@@ -256,26 +251,24 @@ void cdir()
 void copy()
 {
     char a[100], b[100];
-    int c;
-    FILE *p, *q;
+    char c;
     scanf("%s", a);
     scanf("%s", b);
-    p = fopen(a, "r");
-    q = fopen(b, "a");
-    if(p == NULL )
+    int in = open(a, O_RDONLY);
+    int out = open(b, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+    if(in == -1 || out == -1)
     {
         printf("The file is not found\n");
+        return;
     }
     else
     {
-        c = fgetc(p);
-        while(c != EOF)
+        while(read(in, &c, 1) == 1)
         {
-            fputc(c, q);
-            c = fgetc(p);
+            write(out, &c, 1);
         }
-        fclose(p);
-        fclose(q);
+        close(in);
+        close(out);
         printf("\nSuccessfully copied\n");
     }
 
@@ -285,28 +278,25 @@ void cknow()
 {
     char a[100], cha;
     int c, count=0;
-    FILE *p;
     scanf("%s", a);
-    fflush(stdin);
-    printf("\nEnter the character to search: ");
+    c = getchar();
     scanf("%c", &cha);
-    p = fopen(a, "r");
-    if(p == NULL)
+    int fd = open(a, O_RDONLY);
+    if(fd == -1)
     {
-        printf("The file is not found\n");
+        printf("Error : cannot open %s\n", a);
+        return;
     }
     else
     {
-        c = fgetc(p);
-        while(c != EOF)
+        while(read(fd, &c, 1) == 1)
         {
             if(c == cha)
             {
                 count++;
             }
-            c = fgetc(p);
         }
-        fclose(p);
+        close(fd);
         printf("No. of times %c repeated is = %d\n",  cha, count);
     }
 }
@@ -314,56 +304,52 @@ void cknow()
 void lknow()
 {
     char a[100], cha;
-    int c, count=0;
-    FILE *p;
+    int count=0;
+    char c;
     scanf("%s", a);
-    p = fopen(a, "r");
-    if(p == NULL)
+    int fd = open(a, O_RDONLY);
+    if(fd == -1)
     {
-        printf("The file is not found\n");
+        printf("Eror : cannot open file %s\n", a);
+        return;
     }
     else
     {
-        c = fgetc(p);
-        while(c != EOF)
+        while(read(fd, &c, 1) == 1)
         {
             if(c == '\n')
             {
                 count++;
             }
-            c = fgetc(p);
         }
-        fclose(p);
         printf("No. of lines = %d\n", count);
+        close(fd);
     }
-
 }
 
-void ccount()
+void ccount() 
 {
     char a[100], cha;
-    int c, count=0;
-    FILE *p;
+    int count = 0;
+    char c;
     scanf("%s", a);
-    p = fopen(a, "r");
-    if(p == NULL)
+    int fd = open(a, O_RDONLY);
+    if (fd == -1) 
     {
-        printf("The file is not found\n");
-    }
-    else
+        printf("Error : cannot open file %s\n", a);
+    } 
+    else 
     {
-        c = fgetc(p);
-        while(c != EOF)
+        while (read(fd, & c, 1) == 1) 
         {
-            if(c != ' ' && c != '\n')
+            if (c != ' ' && c != '\n') 
             {
                 count++;
             }
-            c = fgetc(p);
         }
-        fclose(p);
         printf("No. of characters in file is = %d\n", count);
     }
+    close(fd);
 }
 
 
@@ -427,71 +413,61 @@ void replaceAll(char *str, const char *oldWord, const char *newWord)
     {
         // Backup current line
         strcpy(temp, str);
-
         // Index of current found word
         index = pos - str;
-
         // Terminate str after word found index
         str[index] = '\0';
-
         // Concatenate str with new word 
         strcat(str, newWord);
-        
         // Concatenate str with remaining words after 
         // oldword found index.
         strcat(str, temp + index + owlen);
     }
 }
 
-void edit()
+void edit() 
 {
     char fileName[100];
-    scanf("%s",fileName);
+    scanf("%s", fileName);
     int lineNo;
-    scanf("%d",&lineNo);
-    FILE* p,*q;
-    p=fopen(fileName,"r");
-    q=fopen("temp","w");
-    if(p == NULL )
+    scanf("%d", & lineNo);
+    int p = open(fileName, O_RDONLY);
+    int q = open("temp", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+    if (p == -1) 
     {
         printf("The file is not found\n");
-    }
-    else
+    } 
+    else 
     {
         char c;
-        c = fgetc(p);
-        int count=1;
-        while(c != EOF && count<=lineNo)
+        int count = 1;
+        while (count < lineNo && read(p, & c, 1) == 1) 
         {
-            fputc(c, q);
-            if(c=='\n')
+            write(q, & c, 1);
+            if (c == '\n')
                 count++;
-            c = fgetc(p);
         }
         fflush(stdin);
         printf("Enter ~ to exit from writing\n");
         printf("Start writing: \n");
         char ch;
-        while(ch != '~')
+        while (ch != '~') 
         {
             ch = getchar();
-            if(ch != '~')
+            if (ch != '~') 
             {
-            fputc(ch, q);
+                write(q, & ch, 1);
             }
         }
-        c = fgetc(p);
-        while(c!='\n'&& c!=EOF)
-            c=fgetc(p);
-        while(c != EOF)
+        while (read(p, &c, 1) == 1 && c != '\n');
+        while (read(p, &c, 1) == 1) 
         {
-            fputc(c, q);
-            c = fgetc(p);
+            write(q, &c, 1);
         }
-        fclose(p);
-        fclose(q);
-        int m=remove(fileName);
-        m = rename("temp",fileName);
+        close(p);
+        close(q);
+        int m = remove(fileName);
+        m = rename("temp", fileName);
     }
 }
 
@@ -512,7 +488,6 @@ void help()
     printf("cknow  >>> To know character count\t\t\tSyntax: \"cknow fileName.txt character\"\n");
     printf("lknow  >>> To get number of lines\t\t\tSyntax: \"lknow FileName.txt\"\n");
     printf("replace>>> To find and replace \t\t\tSyntax: \"replace FileName.txt oldWord newWord\"\n");
-
     printf("exit   >>> To exit\n");
     printf("\n");
 }
