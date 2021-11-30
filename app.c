@@ -29,9 +29,10 @@ void ccount();
 void replace();
 void replaceAll(char *str, const char *oldWord, const char *newWord);
 void edit();
+void Sysinfo();
 
-int main(){
-
+int main()
+{
     char a[100];
     printf("__________________Command Line Text Editor__________________\n\n");
     dt();
@@ -41,7 +42,11 @@ int main(){
         printf(">>> ");
         fflush(stdin);
         scanf("%s", a);
-        if(strcmp(a, "read") == 0)
+        if (strcmp(a, "sysinfo") == 0)
+        {
+            Sysinfo();
+        }
+        else if(strcmp(a, "read") == 0)
         {
             Read();
         }
@@ -471,10 +476,17 @@ void edit()
     }
 }
 
+void Sysinfo()
+{
+    printf("Number of processors configured : %ld\n", sysconf(_SC_NPROCESSORS_CONF));
+    printf("Number of processors available  : %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
+}
+
 void help()
 {
     printf("\n");
     printf("You can enter the following commands:\n\n");
+    printf("sysinfo  >>> To get important system information\n");
     printf("write  >>> To write to a file\t\t\t\tSyntax: \"write filename.txt\"\n");
     printf("read   >>> To read from a file\t\t\t\tSyntax: \"read filename.txt\"\n");
     printf("edit   >>> To edit a particular line from a file\tSyntax: \"edit filename.txt line_no\"\n");
