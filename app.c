@@ -38,136 +38,136 @@ int main(){
     dt();
     printf("Type \"help\" for more things!\n\n");
 
-    do{
-
-    printf(">>> ");
-    fflush(stdin);
-    scanf("%s", a);
-
-    if(strcmp(a, "read") == 0){
-
-        Read();
-
-    }else if(strcmp(a, "write") == 0){
-
-        Write();
-
-    }else if(strcmp(a, "append") == 0){
-
-        append();
-
-    }else if(strcmp(a, "clr") == 0){
-
-        clear();
-
-    }else if(strcmp(a, "help") == 0){
-
-        help();
-
-    }else if(strcmp(a, "dt") == 0){
-
-        dt();
-
-    }else if(strcmp(a, "stscr") == 0){
-
-        startscreen();
-
-    }else if(strcmp(a, "remove") == 0){
-
-        removes();
-
-    }else if(strcmp(a, "rename") == 0){
-
-        renames();
-
-    }else if(strcmp(a, "cdir") == 0){
-
-        cdir();
-
-    }else if(strcmp(a, "copy") == 0){
-
-        copy();
-
-    }else if(strcmp(a, "cknow") == 0){
-
-        cknow();
-
-    }else if(strcmp(a, "lknow") == 0){
-
-        lknow();
-
-    }else if(strcmp(a, "ccount") == 0){
-
-        ccount();
-    }else if(strcmp(a, "exit") == 0){
-
-        exits();
-    }else if(strcmp(a, "replace")==0){
-        replace();
-    }else if(strcmp(a, "edit") == 0){
-
-        edit();
-
-    }else{
-        printf("Enter only stated things in help\n");
-    }
-}while(strcmp(a,"exit"));
+    do
+    {
+        printf(">>> ");
+        fflush(stdin);
+        scanf("%s", a);
+        if(strcmp(a, "read") == 0)
+        {
+            Read();
+        }
+        else if(strcmp(a, "write") == 0)
+        {
+            Write();
+        }
+        else if(strcmp(a, "append") == 0)
+        {
+            append();
+        }
+        else if(strcmp(a, "clr") == 0)
+        {
+            clear();
+        }
+        else if(strcmp(a, "help") == 0)
+        {
+            help();
+        }
+        else if(strcmp(a, "dt") == 0)
+        {
+            dt();
+        }
+        else if(strcmp(a, "stscr") == 0)
+        {
+            startscreen();
+        }
+        else if(strcmp(a, "remove") == 0)
+        {
+            removes();
+        }
+        else if(strcmp(a, "rename") == 0)
+        {
+            renames();
+        }
+        else if(strcmp(a, "cdir") == 0)
+        {
+            cdir();
+        }
+        else if(strcmp(a, "copy") == 0)
+        {
+            copy();
+        }
+        else if(strcmp(a, "cknow") == 0)
+        {
+            cknow();
+        }
+        else if(strcmp(a, "lknow") == 0)
+        {
+            lknow();
+        }
+        else if(strcmp(a, "ccount") == 0)
+        {
+            ccount();
+        }
+        else if(strcmp(a, "exit") == 0)
+        {
+            exits();
+        }
+        else if(strcmp(a, "replace")==0)
+        {
+            replace();
+        }
+        else if(strcmp(a, "edit") == 0)
+        {
+            edit();
+        }
+        else
+        {
+            printf("Enter only stated things in help\n");
+        }
+    }while(strcmp(a,"exit"));
     return 0;
 }
 
-void Read(){
+void Read()
+{
     char a[100];
     scanf("%s", a);
-
     printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
     char c;
-
-    int p = open(a, O_RDONLY);
-
-    if(p == -1){
+    int fd = open(a, O_RDONLY);
+    if(fd == -1)
+    {
         printf("\nError\n");
+        return;
     }
-
     printf("\n");
-    while(read(p,&c,1)==1){
+    while(read(fd, &c, 1) == 1)
         printf("%c", c);
-    }
-
     printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-    close(p);
-
-    printf("\n\n Successfully Read\n");
-
+    close(fd);
+    printf("\nSuccessfully Read\n");
 }
 
-void Write(){
-
-   char a[100];
+void Write()
+{
+    char a[100];
     scanf("%s", a);
     fflush(stdin);
-    int fd=open(a,O_WRONLY);
+    int fd = open(a, O_WRONLY);
+    if (fd == -1)
+    {
+        printf("Error\n");
+        return;
+    }
     printf("Enter ~ to exit from writing\n");
     printf("Start writing: \n");
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     char ch;
-    while(ch != '~'){
+    while(ch != '~')
+    {
         ch = getchar();
-
-        if(ch != '~'){
-
-        write(fd,&ch,1);
-
+        if(ch != '~')
+            write(fd, &ch, 1);
     }
-}
-close(fd);
-    printf("\n\nSuccessfully Written\n");
+    close(fd);
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    printf("\nSuccessfully Written\n");
 }
 
-void append(){
-
+void append()
+{
     char a[100];
-
     FILE *p;
         scanf("%s", a);
 
@@ -200,16 +200,19 @@ void append(){
 
 }
 
-void clear(){
+void clear()
+{
     system("clear");
 }
 
-void dt(){
+void dt()
+{
     time_t tt = time(NULL);
     printf("%s", ctime(&tt));
 }
 
-void startscreen(){
+void startscreen()
+{
     system("cls");
     printf("Command Line Text Editor\n\n");
 
@@ -217,169 +220,167 @@ void startscreen(){
     printf("Type \"help\" for more things!\n\n");
 }
 
-void removes(){
+void removes()
+{
     char a[100];
     int m;
     scanf("%s", a);
-
     m = remove(a);
-
-    if(m == 0){
+    if(m == 0)
+    {
         printf("Successfully removed a file\n");
-    }else{
+    }
+    else
+    {
         printf("Error in removing please check if the file exists in directory\n");
     }
-
 }
 
-void renames(){
-
+void renames()
+{
     char a[100], b[100];
     int m;
     scanf("%s", a);
-
     scanf("%s", b);
-
     m = rename(a, b);
-
-    if(m == 0){
+    if(m == 0)
+    {
         printf("Successfully renamed a file\n");
-    }else{
+    }
+    else
+    {
         printf("Error in removing please check if the file exists in directory\n");
     }
 
 }
 
 
-void cdir(){
+void cdir()
+{
     char a[100];
-
     printf("Your Directory:\n");
     system("dir");
 }
 
-void copy(){
-
+void copy()
+{
     char a[100], b[100];
     int c;
     FILE *p, *q;
-
     scanf("%s", a);
     scanf("%s", b);
     p = fopen(a, "r");
     q = fopen(b, "a");
-    if(p == NULL ){
+    if(p == NULL )
+    {
         printf("The file is not found\n");
-    }else{
-
-    c = fgetc(p);
-    while(c != EOF){
-        fputc(c, q);
-        c = fgetc(p);
     }
-
-    fclose(p);
-    fclose(q);
-
-    printf("\nSuccessfully copied\n");
+    else
+    {
+        c = fgetc(p);
+        while(c != EOF)
+        {
+            fputc(c, q);
+            c = fgetc(p);
+        }
+        fclose(p);
+        fclose(q);
+        printf("\nSuccessfully copied\n");
     }
 
 }
 
-void cknow(){
-
+void cknow()
+{
     char a[100], cha;
     int c, count=0;
     FILE *p;
-
     scanf("%s", a);
-
     fflush(stdin);
     printf("\nEnter the character to search: ");
     scanf("%c", &cha);
-
     p = fopen(a, "r");
-
-    if(p == NULL){
+    if(p == NULL)
+    {
         printf("The file is not found\n");
-    }else{
-
-    c = fgetc(p);
-    while(c != EOF){
-        if(c == cha){
-            count++;
-        }
-        c = fgetc(p);
     }
-
-    fclose(p);
-
-    printf("No. of times %c repeated is = %d\n",  cha, count);
+    else
+    {
+        c = fgetc(p);
+        while(c != EOF)
+        {
+            if(c == cha)
+            {
+                count++;
+            }
+            c = fgetc(p);
+        }
+        fclose(p);
+        printf("No. of times %c repeated is = %d\n",  cha, count);
     }
 }
 
-void lknow(){
-
-    char a[100], cha;
-    int c, count=0;
-    FILE *p;
-
-    scanf("%s", a);
-
-    p = fopen(a, "r");
-
-    if(p == NULL){
-        printf("The file is not found\n");
-    }else{
-
-    c = fgetc(p);
-    while(c != EOF){
-        if(c == '\n'){
-            count++;
-        }
-        c = fgetc(p);
-    }
-
-    fclose(p);
-
-    printf("No. of lines = %d\n", count);
-    }
-
-}
-
-void ccount(){
-
+void lknow()
+{
     char a[100], cha;
     int c, count=0;
     FILE *p;
     scanf("%s", a);
-
     p = fopen(a, "r");
-
-    if(p == NULL){
+    if(p == NULL)
+    {
         printf("The file is not found\n");
-    }else{
-
-    c = fgetc(p);
-    while(c != EOF){
-        if(c != ' ' && c != '\n'){
-            count++;
-        }
+    }
+    else
+    {
         c = fgetc(p);
+        while(c != EOF)
+        {
+            if(c == '\n')
+            {
+                count++;
+            }
+            c = fgetc(p);
+        }
+        fclose(p);
+        printf("No. of lines = %d\n", count);
     }
 
-    fclose(p);
+}
 
-    printf("No. of characters in file is = %d\n", count);
+void ccount()
+{
+    char a[100], cha;
+    int c, count=0;
+    FILE *p;
+    scanf("%s", a);
+    p = fopen(a, "r");
+    if(p == NULL)
+    {
+        printf("The file is not found\n");
+    }
+    else
+    {
+        c = fgetc(p);
+        while(c != EOF)
+        {
+            if(c != ' ' && c != '\n')
+            {
+                count++;
+            }
+            c = fgetc(p);
+        }
+        fclose(p);
+        printf("No. of characters in file is = %d\n", count);
     }
 }
 
 
-void replace(){
+void replace()
+{
     FILE * fPtr;
     FILE * fTemp;
     char path[100];
-    
     char buffer[BUFFER_SIZE];
     char oldWord[100], newWord[100];
     scanf("%s", path);
@@ -387,7 +388,6 @@ void replace(){
     scanf("%s", newWord);
     fPtr  = fopen(path, "r");
     fTemp = fopen("replace.tmp", "w"); 
-
     /* fopen() return NULL if unable to open file in given mode. */
     if (fPtr == NULL || fTemp == NULL)
     {
@@ -396,8 +396,6 @@ void replace(){
         printf("Please check whether file exists and you have read/write privilege.\n");
         exit(EXIT_SUCCESS);
     }
-
-
     /*
      * Read line from source file and write to destination 
      * file after replacing given word.
@@ -413,14 +411,10 @@ void replace(){
       /* Close all files to release resource */
     fclose(fPtr);
     fclose(fTemp);
-
-
     /* Delete original source file */
     remove(path);
-
     /* Rename temp file as original file */
     rename("replace.tmp", path);
-
     printf("\nSuccessfully replaced all occurrences of '%s' with '%s'.", oldWord, newWord);
 }
 
@@ -429,15 +423,12 @@ void replaceAll(char *str, const char *oldWord, const char *newWord)
     char *pos, temp[BUFFER_SIZE];
     int index = 0;
     int owlen;
-
     owlen = strlen(oldWord);
-
     // Fix: If oldWord and newWord are same it goes to infinite loop
-    if (!strcmp(oldWord, newWord)) {
+    if (!strcmp(oldWord, newWord)) 
+    {
         return;
     }
-
-
     /*
      * Repeat till all occurrences are replaced. 
      */
@@ -461,7 +452,8 @@ void replaceAll(char *str, const char *oldWord, const char *newWord)
     }
 }
 
-void edit(){
+void edit()
+{
     char fileName[100];
     scanf("%s",fileName);
     int lineNo;
@@ -469,50 +461,51 @@ void edit(){
     FILE* p,*q;
     p=fopen(fileName,"r");
     q=fopen("temp","w");
-    if(p == NULL ){
+    if(p == NULL )
+    {
         printf("The file is not found\n");
-    }else{
-    char c;
-    c = fgetc(p);
-    int count=1;
-    while(c != EOF && count<=lineNo){
-        fputc(c, q);
-        if(c=='\n')
-            count++;
-        c = fgetc(p);
     }
-     fflush(stdin);
-
+    else
+    {
+        char c;
+        c = fgetc(p);
+        int count=1;
+        while(c != EOF && count<=lineNo)
+        {
+            fputc(c, q);
+            if(c=='\n')
+                count++;
+            c = fgetc(p);
+        }
+        fflush(stdin);
         printf("Enter ~ to exit from writing\n");
         printf("Start writing: \n");
-
         char ch;
-
-        while(ch != '~'){
+        while(ch != '~')
+        {
             ch = getchar();
-
-            if(ch != '~'){
-
+            if(ch != '~')
+            {
             fputc(ch, q);
-
+            }
         }
-    }
-    c = fgetc(p);
-    while(c!='\n'&& c!=EOF)
-        c=fgetc(p);
-    while(c != EOF){
-        fputc(c, q);
         c = fgetc(p);
+        while(c!='\n'&& c!=EOF)
+            c=fgetc(p);
+        while(c != EOF)
+        {
+            fputc(c, q);
+            c = fgetc(p);
+        }
+        fclose(p);
+        fclose(q);
+        int m=remove(fileName);
+        m = rename("temp",fileName);
     }
-    fclose(p);
-    fclose(q);
-    int m=remove(fileName);
-    m=rename("temp",fileName);
-
-}
 }
 
-void help(){
+void help()
+{
     printf("\n");
     printf("You can enter the following commands:\n\n");
     printf("write  >>> To write to a file\t\t\t\tSyntax: \"write filename.txt\"\n");
@@ -533,6 +526,7 @@ void help(){
     printf("\n");
 }
 
-void exits(){
+void exits()
+{
     exit(1);
 }
