@@ -224,16 +224,19 @@ void removes()
 {
     char a[100];
     int m;
-    scanf("%s", a);
-    m = unlink(a);
-    if(m == 0)
+    do
     {
-        printf("Successfully removed a file\n");
-    }
-    else
-    {
-        printf("Error in removing please check if the file exists in directory\n");
-    }
+        scanf("%s", a);
+        m = unlink(a);
+        if(m == 0)
+        {
+            printf("Successfully removed file %s\n",a);
+        }
+        else if(strcmp(a,"end")!=0)
+        {
+            printf("Error in removing please check if the file \"%s\" exists in directory\n",a);
+        }
+    }while(strcmp(a,"end")!=0);
 }
 
 void renames()
@@ -405,7 +408,7 @@ void replace()
     remove(path);
     /* Rename temp file as original file */
     rename("replace.tmp", path);
-    printf("\nSuccessfully replaced all occurrences of '%s' with '%s'.", oldWord, newWord);
+    printf("\nSuccessfully replaced all occurrences of '%s' with '%s'.\n", oldWord, newWord);
 }
 
 void replaceAll(char *str, const char *oldWord, const char *newWord)
@@ -538,7 +541,7 @@ void help()
     printf("read   >>> To read from a file\t\t\t\tSyntax: \"read filename.txt\"\n");
     printf("edit   >>> To edit a particular line from a file\tSyntax: \"edit filename.txt line_no\"\n");
     printf("append >>> To append a file\t\t\t\tSyntax: \"append filename.txt\"\n");
-    printf("remove >>> To remove a file\t\t\t\tSyntax: \"remove filename.txt\"\n");
+    printf("remove >>> To remove all listed files\t\t\tSyntax: \"remove f1.txt f2.txt ... fn.txt end\"\n");
     printf("rename >>> To rename a file\t\t\t\tSyntax: \"rename oldFileName.txt newFileName.txt\"\n");
     printf("clr    >>> To clear the screen\n");
     printf("dt     >>> To show date and time\n");
