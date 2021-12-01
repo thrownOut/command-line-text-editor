@@ -4,12 +4,13 @@
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<sys/types.h>
-#include<sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+#include <sys/wait.h>
 #include <linux/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -203,7 +204,13 @@ void append()
 
 void clear()
 {
-    system("clear");
+    if (fork() == 0)
+    {
+        execlp("clear", "clear", NULL);
+        exit(0);
+    }
+    int status;
+    wait(&status);
 }
 
 void dt()
@@ -214,8 +221,8 @@ void dt()
 
 void startscreen()
 {
-    system("clear");
-    printf("Command Line Text Editor\n\n");
+    clear();
+    printf("__________________Command Line Text Editor__________________\n\n");
     dt();
     printf("Type \"help\" for more things!\n\n");
 }
@@ -261,7 +268,13 @@ void cdir()
 {
     char a[100];
     printf("Your Directory:\n");
-    system("dir");
+    if (fork() == 0)
+    {
+        execlp("ls", "ls", "-l", NULL);
+        exit(0);
+    }
+    int status;
+    wait(&status);
 }
 
 void copy()
