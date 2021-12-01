@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 #include <math.h>
 #include <time.h>
 #include <unistd.h>
@@ -15,6 +16,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <pwd.h>
 
 #define BUFFER_SIZE 1000
 
@@ -39,16 +41,22 @@ void get_mac();
 void get_ip();
 void edit();
 void Sysinfo();
+void init_terminalvals();
+
+char username[1024];
+char devicename[HOST_NAME_MAX];
+char dirname[1024];
 
 int main()
 {
     char a[100];
+    init_terminalvals();
     printf("__________________Command Line Text Editor__________________\n\n");
     dt();
     printf("Type \"help\" for more things!\n\n");
     do
     {
-        printf(">>> ");
+        printf("%s@%s:%s$", username, devicename, dirname);
         fflush(stdin);
         scanf("%s", a);
         if (strcmp(a, "sysinfo") == 0)
@@ -543,6 +551,15 @@ void Sysinfo()
     printf("Number of processors available  : %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
     get_mac();
     get_ip();
+}
+
+void init_terminalvals()
+{
+    gethostname(devicename, HOST_NAME_MAX);
+    struct passwd *pass; 
+    pass = getpwuid(getuid()); 
+    strcpy(username, pass->pw_name); 
+    getcwd(dirname, sizeof(dirname));
 }
 
 void help()
