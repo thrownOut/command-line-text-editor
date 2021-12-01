@@ -17,6 +17,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pwd.h>
+#include <dirent.h>
 
 #define BUFFER_SIZE 1000
 
@@ -56,7 +57,7 @@ int main()
     printf("Type \"help\" for more things!\n\n");
     do
     {
-        printf("%s@%s:%s$", username, devicename, dirname);
+        printf("\033[0;32m%s@%s\033[0;37m:\033[0;34m%s\033[0;37m$ ", username, devicename, dirname);
         fflush(stdin);
         scanf("%s", a);
         if (strcmp(a, "sysinfo") == 0)
@@ -275,14 +276,21 @@ void renames()
 void cdir()
 {
     char a[100];
-    printf("Your Directory:\n");
-    if (fork() == 0)
-    {
-        execlp("ls", "ls", "-l", NULL);
-        exit(0);
-    }
-    int status;
-    wait(&status);
+    DIR * dptr;    
+    struct dirent * iter;    
+    struct stat statbuf;    
+    if ((dptr = opendir(".")) == NULL) {        
+        printf("Cannot open directory \n");        
+        return;    
+    }    
+    chdir(".");   
+    while ((iter = readdir(dptr)) != NULL) {        
+        lstat(iter -> d_name, & statbuf);        
+        if (!S_ISDIR(statbuf.st_mode)) {
+             printf("%s ", iter -> d_name);            
+         }
+     }
+     printf("\n");
 }
 
 void copy()
