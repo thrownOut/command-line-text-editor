@@ -581,6 +581,7 @@ void help()
     printf("append >>> To append a file\t\t\t\tSyntax: \"append filename.txt\"\n");
     printf("remove >>> To remove all listed files\t\t\tSyntax: \"remove f1.txt f2.txt ... fn.txt end\"\n");
     printf("rename >>> To rename a file\t\t\t\tSyntax: \"rename oldFileName.txt newFileName.txt\"\n");
+    printf("ccount >>> To get total character count\t\t\tSyntax: \"ccount FileName.txt\"\n");
     printf("clr    >>> To clear the screen\n");
     printf("dt     >>> To show date and time\n");
     printf("stscr  >>> To show start screen\n");
