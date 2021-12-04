@@ -152,7 +152,7 @@ void Read()
         printf("\nError\n");
         return;
     }
-    printf("\n");
+
     while(read(fd, &c, 1) == 1)
         printf("%c", c);
     printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
